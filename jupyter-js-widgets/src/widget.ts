@@ -412,6 +412,10 @@ class WidgetModel extends Backbone.Model {
      * This invokes a Backbone.Sync.
      */
     save_changes(callbacks?) {
+        console.log('inside save_changes')
+        var i = 0;
+        i = i + 1;
+        console.log(i);
         if (this.comm_live) {
             let options: any = {patch: true}
             if (callbacks) {
