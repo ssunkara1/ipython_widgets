@@ -365,7 +365,6 @@ class WidgetModel extends Backbone.Model {
         // Since the comm is a one-way communication, assume the message
         // arrived.  Don't call success since we don't have a model back from the server
         // this means we miss out on the 'sync' event.
-        this._buffered_state_diff = {};
     }
 
     send_sync_message(attrs, callbacks) {
@@ -420,6 +419,7 @@ class WidgetModel extends Backbone.Model {
                 options.callbacks = callbacks;
             }
             this.save(this._buffered_state_diff, options);
+            this._buffered_state_diff = {};
         }
     }
 

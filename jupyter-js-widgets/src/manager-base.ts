@@ -18,7 +18,7 @@ import {
 
 /**
  * The options for a model.
- * 
+ *
  * #### Notes
  * Either a comm or a model_id must be provided.
  */
@@ -54,19 +54,19 @@ export
 interface StateOptions {
     /**
      * Only return models with one or more displayed views.
-     * 
+     *
      * @default false
      */
     only_displayed?: boolean;
     /**
      * Include models that have comms with severed connections.
-     * 
+     *
      * @default false
      */
     not_live?: boolean;
     /**
      * Drop model attributes that are equal to their default value.
-     * 
+     *
      * @default false
      */
     drop_defaults?: boolean;
@@ -105,7 +105,7 @@ abstract class ManagerBase<T> {
 
     /**
      * Display a view.
-     * 
+     *
      * #### Notes
      * This must be implemented by a subclass. The implementation must trigger the view's displayed
      * event after the view is on the page: `view.trigger('displayed')`
@@ -214,7 +214,11 @@ abstract class ManagerBase<T> {
         return commPromise.then((comm) => {
             // Comm Promise Resolved.
             options_clone.comm = comm;
-            return this.new_model(options_clone, serialized_state);
+            let widget_model = this.new_model(options_clone, serialized_state);
+            widget_model.then(model => {
+                model.sync('create', model);
+                return model;
+            });
         }, () => {
             // Comm Promise Rejected.
             if (!options_clone.model_id) {
@@ -257,7 +261,7 @@ abstract class ManagerBase<T> {
      *
      * @param options - the options for creating the model.
      * @param serialized_state - attribute values for the model.
-     * 
+     *
      * @example
      * widget_manager.new_model({
      *      model_name: 'WidgetModel',
@@ -450,7 +454,7 @@ abstract class ManagerBase<T> {
     abstract _get_comm_info();
 
     /**
-     * Dictionary of model ids and model instance promises 
+     * Dictionary of model ids and model instance promises
      */
     private _models: any = Object.create(null);
 }
